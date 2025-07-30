@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "AutoDucker",
+  "version": "1.0",
+  "permissions": ["tabs", "scripting"],
+  "background": {
+    "service_worker": "src/worker.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.youtube.com/*", "*://*.spotify.com/*"],
+      "js": ["src/contentScript.js"]
+    }
+  ],
+  "action": {
+    "default_popup": "public/popup.html",
+    "default_icon": "public/icons/icon.png"
+  }
+}
