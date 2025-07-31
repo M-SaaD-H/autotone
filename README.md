@@ -46,33 +46,7 @@ AutoTone uses Chrome Extension APIs to monitor and communicate between your brow
 
 ## 🤝 Contributing
 
-Contributions are welcome! To get started:
-
-1. **Fork** this repository (via GitHub UI or):
-   ```bash
-   gh repo fork M-SaaD-H/autotone
-   ```
-2. **Clone your fork:**
-   ```bash
-   git clone https://github.com/YOUR-USERNAME/autotone.git
-   cd autotone
-   ```
-3. **Create a feature branch:**
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
-4. **Make your changes and commit:**
-   ```bash
-   git add .
-   git commit -m "Describe your changes"
-   ```
-5. **Push your branch:**
-   ```bash
-   git push origin feature/your-feature-name
-   ```
-6. **Open a pull request** on GitHub
-
-> **Tip:** For major changes, please open an issue first to discuss your ideas.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on how to contribute to this project.
 
 ---
 
