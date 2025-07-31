@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AutoTone</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+
+<body>
+  <div class="container">
+    <div class="headline">
+      <img src="./icon.png" />
+      <div>
+        <h1>AutoTone</h1>
+        <p>Keeps your audio volume steady and comfortable, automatically.</p>
+      </div>
+    </div>
+
+    <div class="toggle-control">
+      <label for="extensionEnabled">Enable AutoTone:</label>
+      <div class="toggle-switch">
+        <input type="checkbox" id="extensionEnabled" checked>
+        <label for="extensionEnabled" class="toggle-label"></label>
+      </div>
+    </div>
+
+    <div class="volume-control">
+      <label for="lowVolume">Low Volume Level:</label>
+      <div>
+        <input type="range" id="lowVolume" min="0" max="100" value="30">
+        <div class="value-display" id="lowVolumeDisplay">30%</div>
+      </div>
+    </div>
+
+    <div class="volume-control">
+      <label for="highVolume">High Volume Level:</label>
+      <div>
+        <input type="range" id="highVolume" min="0" max="100" value="100">
+        <div class="value-display" id="highVolumeDisplay">100%</div>
+      </div>
+    </div>
+
+    <button id="saveSettings">Save Settings</button>
+
+    <div class="status" id="status">
+      Settings will be saved automatically
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+
+</html>
