@@ -1,11 +1,16 @@
-console.log("AutoDucker service worker loaded");
+console.log("AutoTone service worker loaded");
 
 // Reload the youtube tab to execute the contentScript
-chrome.tabs.query({ url: "*://*.youtube.com/*" }, (tabs) => {
-  for (let tab of tabs) {
-    chrome.tabs.reload(tab.id);
-  }
-});
+// Only reload YouTube tabs once, when the service worker is first loaded
+if (!globalThis._autotone_youtube_reloaded) {
+  chrome.tabs.query({ url: "*://*.youtube.com/*" }, (tabs) => {
+    for (let tab of tabs) {
+      chrome.tabs.reload(tab.id);
+    }
+    
+    globalThis._autotone_youtube_reloaded = true;
+  });
+}
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   console.log("Service worker received message:", msg);
