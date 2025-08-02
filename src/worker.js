@@ -2,15 +2,15 @@ console.log("AutoTone service worker loaded");
 
 // Reload the youtube tab to execute the contentScript
 // Only reload YouTube tabs once, when the service worker is first loaded
-if (!globalThis._autotone_youtube_reloaded) {
-  chrome.tabs.query({ url: "*://*.youtube.com/*" }, (tabs) => {
-    for (let tab of tabs) {
-      chrome.tabs.reload(tab.id);
-    }
+// if (!globalThis._autotone_youtube_reloaded) {
+//   chrome.tabs.query({ url: "*://*.youtube.com/*" }, (tabs) => {
+//     for (let tab of tabs) {
+//       chrome.tabs.reload(tab.id);
+//     }
     
-    globalThis._autotone_youtube_reloaded = true;
-  });
-}
+//     globalThis._autotone_youtube_reloaded = true;
+//   });
+// }
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   console.log("Service worker received message:", msg);
@@ -50,15 +50,19 @@ function adjustSpotifyVolume(volumeLevel) {
       chrome.scripting.executeScript({
         target: { tabId: tab.id },
         func: (volume) => {
-          const volumeInput = document.querySelector('[data-testid="volume-bar"] .hidden-visually input');
-          console.log("volumeInput:", volumeInput);
+          // If volume is 0, then pause the music instead of decreasing the volume
+          if(volume === 0) {
+            const playButton = document.querySelector('[data-testid="control-button-playpause"');
+            playButton.dispatchEvent(new Event("click", { bubbles: true }));
 
-          console.log("volume =", volume)
+            return;
+          }
+
+          const volumeInput = document.querySelector('[data-testid="volume-bar"] .hidden-visually input');
+
           volumeInput.value = volume;
 
-          console.log("new volumeInput.value =", volumeInput.value)
           volumeInput.dispatchEvent(new Event("input", { bubbles: true }));
-          console.log("done")
         },
         args: [volumeLevel]
       }).then((results) => {

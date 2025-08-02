@@ -52,7 +52,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const settings = {
       lowVolume: parseInt(lowVolumeSlider.value),
       highVolume: parseInt(highVolumeSlider.value),
-      enabled: extensionToggle.checked
+      enabled: extensionToggle.checked,
+      pause: parseInt(lowVolumeSlider.value) === 0
     };
 
     chrome.storage.sync.set(settings, function() {
