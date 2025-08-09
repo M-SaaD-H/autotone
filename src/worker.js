@@ -34,12 +34,14 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
         chrome.storage.sync.get(['lowVolume'], function (result) {
           const lowVolume = result.lowVolume !== undefined ? result.lowVolume / 100 : 0.3;
           adjustSpotifyVolume(lowVolume, doPause);
+          adjustYtMusicVolume(lowVolume, doPause);
         });
       } else if (msg.event === "youtube_pause") {
         // Get high volume setting from storage
         chrome.storage.sync.get(['highVolume'], function (result) {
           const highVolume = result.highVolume !== undefined ? result.highVolume / 100 : 1.0;
           adjustSpotifyVolume(highVolume, doPause);
+          adjustYtMusicVolume(highVolume, doPause);
         });
       }
     });
@@ -68,6 +70,7 @@ function adjustSpotifyVolume(volumeLevel, doPause) {
           volumeInput.value = volume;
 
           volumeInput.dispatchEvent(new Event("input", { bubbles: true }));
+          volumeInput.dispatchEvent(new Event("change", { bubbles: true }));
         },
         args: [volumeLevel, doPause]
       }).then((results) => {
@@ -79,23 +82,38 @@ function adjustSpotifyVolume(volumeLevel, doPause) {
   });
 }
 
-// function handleSpotifyPauseToggle() {
-//   chrome.tabs.query({ url: "*://*.spotify.com/*" }, (tabs) => {
-//     console.log("Found Spotify tabs:", tabs.length);
+function adjustYtMusicVolume(volumeLevel, doPause) {
+  console.log("Adjusting YT Music volume to:", volumeLevel);
 
-//     for (let tab of tabs) {
-//       chrome.scripting.executeScript({
-//         target: { tabId: tab.id },
-//         func: () => {
-//           const pauseToggleButton = document.querySelector('[data-testid="control-button-playpause"]');
-//           pauseToggleButton.dispatchEvent(new Event('click', { bubbles: true }));
-//         },
-//         args: []
-//       }).then((results) => {
-//         console.log("Pause result:", results);
-//       }).catch((error) => {
-//         console.error("Error pausing:", error);
-//       });
-//     }
-//   });
-// }
+  chrome.tabs.query({ url: "*://music.youtube.com/*" }, (tabs) => {
+    console.log("Found YT Music tabs:", tabs.length);
+
+    for (let tab of tabs) {
+      chrome.scripting.executeScript({
+        target: { tabId: tab.id },
+        func: (volume, doPause) => {
+          if (doPause) {
+            const pauseToggleButton = document.querySelector('#play-pause-button');
+            pauseToggleButton.dispatchEvent(new Event('click', { bubbles: true }));
+
+            return;
+          }
+
+          // Decreasing the volume is not working
+          const volumeInput = document.querySelector('#volume-slider');
+          console.log("volumeInput:", volumeInput)
+
+          volumeInput.value = volume;
+
+          volumeInput.dispatchEvent(new Event("input", { bubbles: true }));
+          volumeInput.dispatchEvent(new Event("change", { bubbles: true }));
+        },
+        args: [volumeLevel, doPause]
+      }).then((results) => {
+        console.log("Volume adjustment result:", results);
+      }).catch((error) => {
+        console.error("Error adjusting volume:", error);
+      });
+    }
+  });
+}
